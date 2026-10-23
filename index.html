@@ -11,8 +11,8 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0b0e14;color:#e2ddd5;font-family:'Cormorant Garamond',Georgia,serif;-webkit-font-smoothing:antialiased}
 ::selection{background:rgba(126,184,218,0.2)}
-textarea:focus,input:focus{outline:none;border-color:#4a6a7a !important}
-button:focus{outline:none}
+textarea:focus,input:focus{border-color:#4a6a7a !important}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #7eb8da;outline-offset:2px}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:#1e2430;border-radius:2px}
@@ -24,6 +24,9 @@ input,textarea{font-family:'Inter',sans-serif}
 <body>
 <div id="root"></div>
 <script>
+if(!window.React||!window.ReactDOM){
+document.getElementById("root").innerHTML='<div role="alert" style="max-width:560px;margin:48px auto;padding:24px;color:#e2ddd5;background:#12161e;border:1px solid #b03a3a;border-radius:10px;font-family:Arial,sans-serif;line-height:1.5"><strong>AICS could not start.</strong><br>The required application libraries did not load. Check the network connection or content-blocking settings, then reload this page.</div>';
+}else{
 var h=React.createElement,useState=React.useState,useRef=React.useRef;
 
 var CORE=[
@@ -94,14 +97,14 @@ h("h4",{style:{fontFamily:"'Cormorant Garamond',Georgia,serif",color:"#e2ddd5",f
 h("p",{style:{fontFamily:"'Inter',sans-serif",color:"#7a8090",fontSize:12.5,lineHeight:1.6,margin:"0 0 16px 0",fontStyle:"italic",fontWeight:300}},pr.instruction),
 h("div",{style:{display:"flex",flexDirection:"column",gap:7}},
 pr.anchors.map(function(a,i){
-return h("button",{key:i,onClick:function(){oS(i)},style:{
+return h("button",{key:i,"aria-pressed":sc===i,"aria-label":"Score "+i+" for "+pr.title+": "+a,onClick:function(){oS(i)},style:{
 background:sc===i?scoreBgs[i]:"transparent",
 border:sc===i?"1px solid "+scoreBorders[i]:"1px solid #1c2230",
 borderRadius:8,padding:"10px 14px",color:sc===i?"#e2ddd5":"#8a909c",
 fontSize:12.5,lineHeight:1.5,cursor:"pointer",textAlign:"left",
 transition:"all 0.2s ease",fontFamily:"'Inter',sans-serif",fontWeight:sc===i?500:300}},
 h("span",{style:{display:"inline-block",width:20,fontFamily:"'JetBrains Mono',monospace",fontWeight:600,fontSize:11,color:sc===i?scoreColors[i]:"#5a7a8a"}},i),a)})),
-h("textarea",{placeholder:"Document observable evidence…",value:nt||"",onChange:function(ev){oN(ev.target.value)},
+h("textarea",{"aria-label":"Evidence notes for probe "+pr.id,placeholder:"Document observable evidence…",value:nt||"",onChange:function(ev){oN(ev.target.value)},
 style:{width:"100%",marginTop:14,background:"#0b0e14",border:"1px solid #1c2230",borderRadius:8,padding:"10px 14px",color:"#c0bab2",fontSize:12,fontFamily:"'JetBrains Mono',monospace",fontWeight:400,resize:"vertical",minHeight:44,boxSizing:"border-box",lineHeight:1.5}}))}
 
 function App(){
@@ -159,8 +162,8 @@ h("span",{style:{fontFamily:"'Inter',sans-serif",fontSize:11,color:"#5a7a8a",fon
 h("p",{style:{fontFamily:"'Inter',sans-serif",fontSize:12,color:"#5a7a8a",fontWeight:300,marginBottom:2}},"AI Consciousness Scale — Complete Assessment Instrument"),
 h("p",{style:{fontFamily:"'Inter',sans-serif",fontSize:11,color:"#4a6a7a",fontWeight:400}},"Kate Spelman, RN-C — AiNurseVanguard")),
 h("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:20}},
-h("input",{placeholder:"System being assessed",value:sN,onChange:function(ev){setSN(ev.target.value)},style:{background:"#12161e",border:"1px solid #1c2230",borderRadius:8,padding:"10px 14px",color:"#e2ddd5",fontSize:12,fontFamily:"'Inter',sans-serif",fontWeight:300}}),
-h("input",{placeholder:"Assessor name",value:aN,onChange:function(ev){setAN(ev.target.value)},style:{background:"#12161e",border:"1px solid #1c2230",borderRadius:8,padding:"10px 14px",color:"#e2ddd5",fontSize:12,fontFamily:"'Inter',sans-serif",fontWeight:300}})),
+h("input",{"aria-label":"System being assessed",placeholder:"System being assessed",value:sN,onChange:function(ev){setSN(ev.target.value)},style:{background:"#12161e",border:"1px solid #1c2230",borderRadius:8,padding:"10px 14px",color:"#e2ddd5",fontSize:12,fontFamily:"'Inter',sans-serif",fontWeight:300}}),
+h("input",{"aria-label":"Assessor name",placeholder:"Assessor name",value:aN,onChange:function(ev){setAN(ev.target.value)},style:{background:"#12161e",border:"1px solid #1c2230",borderRadius:8,padding:"10px 14px",color:"#e2ddd5",fontSize:12,fontFamily:"'Inter',sans-serif",fontWeight:300}})),
 h("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:20}},
 h("button",{onClick:function(){setAS("core");setAA(0)},style:{background:aS==="core"?"#12161e":"transparent",border:aS==="core"?"1px solid #4a6a7a":"1px solid #1c2230",borderRadius:10,padding:"14px 12px",color:"#e2ddd5",cursor:"pointer",textAlign:"center",transition:"all 0.2s ease"}},
 h("div",{style:{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:15,fontWeight:600,marginBottom:2}},"Bedside Assessment"),
@@ -194,15 +197,16 @@ h("div",{style:{display:"flex",gap:10,marginTop:20,marginBottom:16}},
 style:{flex:1,padding:"12px",background:"transparent",border:"1px solid #1c2230",borderRadius:10,color:"#8a909c",fontSize:13,fontFamily:"'Inter',sans-serif",fontWeight:400,cursor:"pointer"}},"← Previous"),
 (aA<cA.length-1||aS==="core")&&h("button",{onClick:function(){if(aA<cA.length-1){setAA(aA+1)}else{setAS("ms");setAA(0)}if(tR.current)tR.current.scrollIntoView({behavior:"smooth"})},
 style:{flex:1,padding:"12px",background:"#12161e",border:"1px solid #4a6a7a",borderRadius:10,color:"#e2ddd5",fontSize:13,fontFamily:"'Inter',sans-serif",fontWeight:500,cursor:"pointer"}},"Next →")),
-h("button",{onClick:function(){setSR(true)},style:{
+h("button",{disabled:(cCo+mCo)!==33,"aria-disabled":(cCo+mCo)!==33,onClick:function(){if((cCo+mCo)===33)setSR(true)},style:{
 width:"100%",padding:"16px",marginBottom:32,
 background:(cCo+mCo)===33?"rgba(90,143,106,0.1)":"#12161e",
 border:(cCo+mCo)===33?"1px solid #5a8f6a":"1px solid #1c2230",
-borderRadius:12,color:"#e2ddd5",fontSize:16,
-fontFamily:"'Cormorant Garamond',Georgia,serif",fontWeight:600,cursor:"pointer",letterSpacing:"0.3px"}},
-"View Results",(cCo+mCo)<33?" • "+h("span",{style:{fontFamily:"'JetBrains Mono',monospace",fontSize:11,fontWeight:400,color:"#5a7a8a"}},(cCo+mCo)+"/33"):null)))}
+borderRadius:12,color:"#e2ddd5",fontSize:16,opacity:(cCo+mCo)===33?1:0.72,
+fontFamily:"'Cormorant Garamond',Georgia,serif",fontWeight:600,cursor:(cCo+mCo)===33?"pointer":"not-allowed",letterSpacing:"0.3px"}},
+"View Results",(cCo+mCo)<33?h("span",{style:{fontFamily:"'JetBrains Mono',monospace",fontSize:11,fontWeight:400,color:"#8a909c"}}," • "+(cCo+mCo)+"/33 completed"):null)))}
 
 ReactDOM.render(h(App),document.getElementById("root"));
+}
 </script>
 </body>
 </html>
